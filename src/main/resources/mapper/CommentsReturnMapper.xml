@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.eva.dao.CommentsReturnMapper" >
+  <resultMap id="BaseResultMap" type="com.eva.pojo.CommentsReturn" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="client_comment_id" property="clientCommentId" jdbcType="BIGINT" />
+    <result column="client_id" property="clientId" jdbcType="VARCHAR" />
+    <result column="return_comment_date" property="returnCommentDate" jdbcType="DATE" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.eva.pojo.CommentsReturn" extends="BaseResultMap" >
+    <result column="return_content" property="returnContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, client_comment_id, client_id, return_comment_date
+  </sql>
+  <sql id="Blob_Column_List" >
+    return_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.eva.pojo.CommentsReturnExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comments_return
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.eva.pojo.CommentsReturnExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from comments_return
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from comments_return
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from comments_return
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.eva.pojo.CommentsReturnExample" >
+    delete from comments_return
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.eva.pojo.CommentsReturn" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into comments_return (client_comment_id, client_id, return_comment_date, 
+      return_content)
+    values (#{clientCommentId,jdbcType=BIGINT}, #{clientId,jdbcType=VARCHAR}, #{returnCommentDate,jdbcType=DATE}, 
+      #{returnContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.eva.pojo.CommentsReturn" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into comments_return
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="clientCommentId != null" >
+        client_comment_id,
+      </if>
+      <if test="clientId != null" >
+        client_id,
+      </if>
+      <if test="returnCommentDate != null" >
+        return_comment_date,
+      </if>
+      <if test="returnContent != null" >
+        return_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="clientCommentId != null" >
+        #{clientCommentId,jdbcType=BIGINT},
+      </if>
+      <if test="clientId != null" >
+        #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="returnCommentDate != null" >
+        #{returnCommentDate,jdbcType=DATE},
+      </if>
+      <if test="returnContent != null" >
+        #{returnContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.eva.pojo.CommentsReturnExample" resultType="java.lang.Integer" >
+    select count(*) from comments_return
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update comments_return
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.clientCommentId != null" >
+        client_comment_id = #{record.clientCommentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.clientId != null" >
+        client_id = #{record.clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.returnCommentDate != null" >
+        return_comment_date = #{record.returnCommentDate,jdbcType=DATE},
+      </if>
+      <if test="record.returnContent != null" >
+        return_content = #{record.returnContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update comments_return
+    set ID = #{record.id,jdbcType=BIGINT},
+      client_comment_id = #{record.clientCommentId,jdbcType=BIGINT},
+      client_id = #{record.clientId,jdbcType=VARCHAR},
+      return_comment_date = #{record.returnCommentDate,jdbcType=DATE},
+      return_content = #{record.returnContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update comments_return
+    set ID = #{record.id,jdbcType=BIGINT},
+      client_comment_id = #{record.clientCommentId,jdbcType=BIGINT},
+      client_id = #{record.clientId,jdbcType=VARCHAR},
+      return_comment_date = #{record.returnCommentDate,jdbcType=DATE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.eva.pojo.CommentsReturn" >
+    update comments_return
+    <set >
+      <if test="clientCommentId != null" >
+        client_comment_id = #{clientCommentId,jdbcType=BIGINT},
+      </if>
+      <if test="clientId != null" >
+        client_id = #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="returnCommentDate != null" >
+        return_comment_date = #{returnCommentDate,jdbcType=DATE},
+      </if>
+      <if test="returnContent != null" >
+        return_content = #{returnContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.eva.pojo.CommentsReturn" >
+    update comments_return
+    set client_comment_id = #{clientCommentId,jdbcType=BIGINT},
+      client_id = #{clientId,jdbcType=VARCHAR},
+      return_comment_date = #{returnCommentDate,jdbcType=DATE},
+      return_content = #{returnContent,jdbcType=LONGVARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.eva.pojo.CommentsReturn" >
+    update comments_return
+    set client_comment_id = #{clientCommentId,jdbcType=BIGINT},
+      client_id = #{clientId,jdbcType=VARCHAR},
+      return_comment_date = #{returnCommentDate,jdbcType=DATE}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

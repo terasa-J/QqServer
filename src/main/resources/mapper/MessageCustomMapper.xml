@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.eva.dao.MessageCustomMapper">
+<!--使用动态sql-->
+   <sql id="find_message_where">
+   	<!-- 使用动态sql，通过if判断，满足条件进行sql拼接 -->
+   	<!-- 信息查询条件通过MessageQueryVo包装对象 中messageCustom属性传递 -->
+   		<if test="messageCustom!=null">
+   			<if test="messageCustom.name!=null and messageCustom.name!=''">
+   				message.name like '%${messageCustom.name}%'
+   			</if>
+   		</if>
+	
+   </sql>
+<select id="findMessageList" parameterType="com.eva.pojo.MessageQueryVo" resultType="com.eva.pojo.MessageCustom">
+select * from message
+<where>
+<include refid="find_message_where"></include>
+</where> 
+
+
+</select>
+</mapper>
